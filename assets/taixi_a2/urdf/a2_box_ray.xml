@@ -1,0 +1,643 @@
+<!-- ============================================================
+  MuJoCo XML for Unitree A2 (Biped Configuration)
+  Converted from a2.urdf (SolidWorks export)
+
+  Legs: 2 (right + left), 6 DOF per leg = 12 actuated joints
+  Sensors: joint encoders, IMU, foot contact, actuator force
+  Actuators: position-controlled PD motors on all revolute joints
+============================================================ -->
+
+<mujoco model="a2">
+
+  <!-- ========== Compiler & Options ========== -->
+  <compiler angle="radian" meshdir="../meshes" autolimits="true"/>
+
+  <option timestep="0.005" gravity="0 0 -9.81">
+    <!-- <flag contactparam="enable"/> -->
+  </option>
+
+  <default>
+
+    <joint damping="0.0" armature="0.00" limited="true"/>
+    <!-- <motor ctrlrange="-1 1" ctrllimited="false"/> -->
+
+    <default class="gemo_visual">  <!-- 只显示,不参与碰撞 -->
+      <geom contype="0" conaffinity="0"/>
+    </default>
+
+    <default class="gemo_collision">  <!-- 只参与碰撞 -->
+      <geom contype="0" conaffinity="1" group="3"/>
+    </default>
+
+    <default class="gemo_collision_box"> 
+      <geom contype="1" conaffinity="1" group="4"/>
+    </default>
+
+  </default>
+
+  <!-- ========== Assets (STL Meshes) ========== -->
+  <asset>
+    <mesh name="mesh_base"            file="base_link.STL"/>
+    <mesh name="mesh_l_hip_roll"      file="left_hip_roll_link.STL"/>
+    <mesh name="mesh_l_hip_yaw"       file="left_hip_yaw_link.STL"/>
+    <mesh name="mesh_l_hip_pitch"     file="left_hip_pitch_link.STL"/>
+    <mesh name="mesh_l_knee"          file="left_knee_link.STL"/>
+    <mesh name="mesh_l_ankle_pitch"   file="left_ankle_pitch_link.STL"/>
+    <mesh name="mesh_l_ankle_roll"    file="left_ankle_roll_link.STL"/>
+    <mesh name="mesh_r_hip_roll"      file="right_hip_roll_link.STL"/>
+    <mesh name="mesh_r_hip_yaw"       file="right_hip_yaw_link.STL"/>
+    <mesh name="mesh_r_hip_pitch"     file="right_hip_pitch_link.STL"/>
+    <mesh name="mesh_r_knee"          file="right_knee_link.STL"/>
+    <mesh name="mesh_r_ankle_pitch"   file="right_ankle_pitch_link.STL"/>
+    <mesh name="mesh_r_ankle_roll"    file="right_ankle_roll_link.STL"/>
+  </asset>
+
+  <asset>
+      <texture name='texture_plane' type='2d' builtin='checker' rgb1='0.2745 0.5098 0.7059' rgb2='0.5294 0.8078 0.9804' width='128' height='128'/>
+      <material name='material_plane' reflectance='0.0' texture='texture_plane' texrepeat='1 1' texuniform='true'/>
+      <material name="gray" rgba="0.3 0.3 0.3 1"/>
+      <material name="blue" rgba="0 0 1 1"/>
+      <material name="red" rgba="1 0 0 1"/>
+      <material name="green" rgba="0 1 0 1"/>
+  </asset>
+
+  <!-- ========== Worldbody ========== -->
+  <worldbody>
+
+    <body name= "box" pos="0 0 0" euler="0 0 0">
+      <geom class="gemo_collision_box" type="box" size="0.2 0.2 0.1" pos="1.5 0.6 0.1"/>
+    </body>
+
+
+
+
+    <geom name="floor" type="plane" conaffinity="2" group="4" size="100 100 .2" material="material_plane"/>
+       <light directional="true" ambient=".3 .3 .3" pos="30 30 30" dir="0 -.5 -1"
+                    diffuse=".5 .5 .5" specular=".5 .5 .5" />
+
+
+    <body name="base_link" pos="0 0 1.05" euler="0 0 0">
+      <freejoint name="base_free"/>
+      <inertial pos="-0.14464 0 0.63562" mass="1.6082" fullinertia="1.6349 1.6777 0.06302 0 0.2309 0"/>
+      <geom class="gemo_visual" type="mesh" mesh="mesh_base" rgba="1 0 0 1"/>
+      <geom class="gemo_collision" type="box" size="0.2 0.15 0.75" pos="-0.2 0 0.75"/>
+ 
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <body name="left_hip_roll_link" pos="-0.001 0.075 0" euler="0 0 0">
+        <inertial pos="-0.11964 0.10244 -0.05598" mass="0.34283" fullinertia="0.00223 0.00379 0.00287 0.00091 -0.00132 0.00049"/>
+        <joint name="left_hip_roll_joint" axis="1 0 0" range="-0.52 2.97"/>
+        <geom class="gemo_visual" type="mesh" mesh="mesh_l_hip_roll"/>
+
+        <body name="left_hip_yaw_link" pos="-0.166 0.128 -0.0835" euler="0 0 0">
+          <inertial pos="-1E-05 0.00843 -0.04551" mass="0.46018"
+                    fullinertia="0.00023 0.00035 0.00016 0 0 0"/>
+          <joint name="left_hip_yaw_joint" axis="0 0 1" range="-2.76 2.76"/>
+          <geom class="gemo_visual" type="mesh" mesh="mesh_l_hip_yaw"/>
+
+          <body name="left_hip_pitch_link" pos="0 0.028 -0.0455" euler="0 0 0">
+            <inertial pos="0.00472 -0.01824 -0.17562" mass="0.81624"
+                      fullinertia="0.01192 0.01225 0.00052 -4E-05 -0.00047 -0.00068"/>
+            <joint name="left_hip_pitch_joint" axis="0 1 0" range="-2.53 2.88"/>
+            <geom class="gemo_visual" type="mesh" mesh="mesh_l_hip_pitch"/>
+
+            <body name="left_knee_link" pos="0 -0.04325 -0.4" euler="0 0 0">
+              <inertial pos="0 0.01314 -0.14741" mass="0.10574"
+                        fullinertia="0.0018 0.0018 1E-05 0 0 -1E-05"/>
+              <joint name="left_knee_joint" axis="0 1 0" range="-0.09 2.88"/>
+              <geom class="gemo_visual" type="mesh" mesh="mesh_l_knee"/>
+
+              <body name="left_ankle_pitch_link" pos="0 0.00825 -0.392" euler="0 0 0">
+                <inertial pos="-0.04625 -0.01898 0" mass="0.04908"
+                          fullinertia="7E-05 5E-05 0.00011 -4E-05 0 0"/>
+                <joint name="left_ankle_pitch_joint" axis="0 1 0" range="-0.87 0.52"/>
+                <geom class="gemo_visual" type="mesh" mesh="mesh_l_ankle_pitch"/>
+
+                <body name="left_ankle_roll_link" pos="-0.063229 -0.0765 0" euler="0 0 0">
+                  <inertial pos="0.04783 0 -0.08669" mass="0.21284"
+                            fullinertia="0.00043 0.00147 0.00134 0 0.00031 0"/>
+                  <joint name="left_ankle_roll_joint" axis="1 0 0" range="-0.26 0.26"/>
+                  <geom class="gemo_visual" type="mesh" mesh="mesh_l_ankle_roll" rgba="0 0 1 1"/>
+
+                  <body name="leg_lfoot_link" pos="0.11 0.0 -0.125" euler="0 0 1.5708">
+                    <inertial pos="0 0 0" mass="0.0001"
+                              fullinertia="0.000001 0.000001 0.000001 0 0 0"/>
+                    <geom class="gemo_collision" type="box" size="0.06 0.1275 0.001" pos="0 0 0.0125" rgba="0 1 0 1"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <body name="right_hip_roll_link" pos="-0.001 -0.075 0" euler="0 0 0">
+        <inertial pos="-0.11964 -0.10243 -0.05598" mass="0.34281" fullinertia="0.00223 0.00379 0.00287 -0.00091 -0.00132 -0.00049"/>
+        <joint name="right_hip_roll_joint" axis="1 0 0" range="-2.97 0.52"/>
+        <geom class="gemo_visual" type="mesh" mesh="mesh_r_hip_roll"/>
+
+        <body name="right_hip_yaw_link" pos="-0.166 -0.128 -0.0835" euler="0 0 0">
+          <inertial pos="-1E-05 -0.00843 -0.04551" mass="0.46018"
+                    fullinertia="0.00023 0.00035 0.00016 0 0 0"/>
+          <joint name="right_hip_yaw_joint" axis="0 0 1" range="-2.76 2.76"/>
+          <geom class="gemo_visual" type="mesh" mesh="mesh_r_hip_yaw"/>
+
+          <body name="right_hip_pitch_link" pos="0 -0.028 -0.0455" euler="0 0 0">
+            <inertial pos="0.00472 0.01824 -0.17562" mass="0.81624"
+                      fullinertia="0.01192 0.01225 0.00052 4E-05 -0.00047 0.00068"/>
+            <joint name="right_hip_pitch_joint" axis="0 1 0" range="-2.53 2.88"/>
+            <geom class="gemo_visual" type="mesh" mesh="mesh_r_hip_pitch"/>
+
+            <body name="right_knee_link" pos="0 0.04325 -0.4" euler="0 0 0">
+              <inertial pos="0 -0.01314 -0.14741" mass="0.10574"
+                        fullinertia="0.0018 0.0018 1E-05 0 0 1E-05"/>
+              <joint name="right_knee_joint" axis="0 1 0" range="-0.09 2.88"/>
+              <geom class="gemo_visual" type="mesh" mesh="mesh_r_knee"/>
+
+              <body name="right_ankle_pitch_link" pos="0 -0.00825 -0.392" euler="0 0 0">
+                <inertial pos="-0.04625 0.01898 0" mass="0.04908"
+                          fullinertia="7E-05 5E-05 0.00011 4E-05 0 0"/>
+                <joint name="right_ankle_pitch_joint" axis="0 1 0" range="-0.87 0.52"/>
+                <geom class="gemo_visual" type="mesh" mesh="mesh_r_ankle_pitch"/>
+
+                <body name="right_ankle_roll_link" pos="-0.063229 0.0765 0" euler="0 0 0">
+                  <inertial pos="0.04784 0 -0.08669" mass="0.21281"
+                            fullinertia="0.00043 0.00147 0.00134 0 0.00031 0"/>
+                  <joint name="right_ankle_roll_joint" axis="1 0 0" range="-0.26 0.26"/>
+                  <geom class="gemo_visual" type="mesh" mesh="mesh_r_ankle_roll" rgba="0 0 1 1"/>
+
+                  <body name="leg_rfoot_link" pos="0.11 0.0 -0.125" euler="0 0 1.5708">
+                    <inertial pos="0 0 0" mass="0.0001"
+                              fullinertia="0.000001 0.000001 0.000001 0 0 0"/>
+                    <geom class="gemo_collision" type="box" size="0.06 0.1275 0.001" pos="0 0 0.0125" rgba="0 1 0 1"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+
+
+
+
+
+
+    <!-- ========== Ray Scanner Sites (187 rays, 17×11 grid) ========== -->
+      <site name="ray_site_0" type="sphere" size="0.02" pos="-0.8 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_1" type="sphere" size="0.02" pos="-0.7 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_2" type="sphere" size="0.02" pos="-0.6 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_3" type="sphere" size="0.02" pos="-0.5 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_4" type="sphere" size="0.02" pos="-0.4 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_5" type="sphere" size="0.02" pos="-0.3 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_6" type="sphere" size="0.02" pos="-0.2 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_7" type="sphere" size="0.02" pos="-0.1 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_8" type="sphere" size="0.02" pos="0.0 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_9" type="sphere" size="0.02" pos="0.1 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_10" type="sphere" size="0.02" pos="0.2 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_11" type="sphere" size="0.02" pos="0.3 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_12" type="sphere" size="0.02" pos="0.4 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_13" type="sphere" size="0.02" pos="0.5 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_14" type="sphere" size="0.02" pos="0.6 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_15" type="sphere" size="0.02" pos="0.7 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_16" type="sphere" size="0.02" pos="0.8 -0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_17" type="sphere" size="0.02" pos="-0.8 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_18" type="sphere" size="0.02" pos="-0.7 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_19" type="sphere" size="0.02" pos="-0.6 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_20" type="sphere" size="0.02" pos="-0.5 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_21" type="sphere" size="0.02" pos="-0.4 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_22" type="sphere" size="0.02" pos="-0.3 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_23" type="sphere" size="0.02" pos="-0.2 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_24" type="sphere" size="0.02" pos="-0.1 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_25" type="sphere" size="0.02" pos="0.0 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_26" type="sphere" size="0.02" pos="0.1 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_27" type="sphere" size="0.02" pos="0.2 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_28" type="sphere" size="0.02" pos="0.3 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_29" type="sphere" size="0.02" pos="0.4 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_30" type="sphere" size="0.02" pos="0.5 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_31" type="sphere" size="0.02" pos="0.6 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_32" type="sphere" size="0.02" pos="0.7 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_33" type="sphere" size="0.02" pos="0.8 -0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_34" type="sphere" size="0.02" pos="-0.8 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_35" type="sphere" size="0.02" pos="-0.7 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_36" type="sphere" size="0.02" pos="-0.6 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_37" type="sphere" size="0.02" pos="-0.5 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_38" type="sphere" size="0.02" pos="-0.4 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_39" type="sphere" size="0.02" pos="-0.3 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_40" type="sphere" size="0.02" pos="-0.2 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_41" type="sphere" size="0.02" pos="-0.1 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_42" type="sphere" size="0.02" pos="0.0 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_43" type="sphere" size="0.02" pos="0.1 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_44" type="sphere" size="0.02" pos="0.2 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_45" type="sphere" size="0.02" pos="0.3 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_46" type="sphere" size="0.02" pos="0.4 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_47" type="sphere" size="0.02" pos="0.5 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_48" type="sphere" size="0.02" pos="0.6 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_49" type="sphere" size="0.02" pos="0.7 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_50" type="sphere" size="0.02" pos="0.8 -0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_51" type="sphere" size="0.02" pos="-0.8 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_52" type="sphere" size="0.02" pos="-0.7 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_53" type="sphere" size="0.02" pos="-0.6 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_54" type="sphere" size="0.02" pos="-0.5 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_55" type="sphere" size="0.02" pos="-0.4 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_56" type="sphere" size="0.02" pos="-0.3 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_57" type="sphere" size="0.02" pos="-0.2 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_58" type="sphere" size="0.02" pos="-0.1 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_59" type="sphere" size="0.02" pos="0.0 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_60" type="sphere" size="0.02" pos="0.1 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_61" type="sphere" size="0.02" pos="0.2 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_62" type="sphere" size="0.02" pos="0.3 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_63" type="sphere" size="0.02" pos="0.4 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_64" type="sphere" size="0.02" pos="0.5 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_65" type="sphere" size="0.02" pos="0.6 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_66" type="sphere" size="0.02" pos="0.7 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_67" type="sphere" size="0.02" pos="0.8 -0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_68" type="sphere" size="0.02" pos="-0.8 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_69" type="sphere" size="0.02" pos="-0.7 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_70" type="sphere" size="0.02" pos="-0.6 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_71" type="sphere" size="0.02" pos="-0.5 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_72" type="sphere" size="0.02" pos="-0.4 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_73" type="sphere" size="0.02" pos="-0.3 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_74" type="sphere" size="0.02" pos="-0.2 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_75" type="sphere" size="0.02" pos="-0.1 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_76" type="sphere" size="0.02" pos="0.0 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_77" type="sphere" size="0.02" pos="0.1 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_78" type="sphere" size="0.02" pos="0.2 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_79" type="sphere" size="0.02" pos="0.3 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_80" type="sphere" size="0.02" pos="0.4 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_81" type="sphere" size="0.02" pos="0.5 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_82" type="sphere" size="0.02" pos="0.6 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_83" type="sphere" size="0.02" pos="0.7 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_84" type="sphere" size="0.02" pos="0.8 -0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_85" type="sphere" size="0.02" pos="-0.8 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_86" type="sphere" size="0.02" pos="-0.7 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_87" type="sphere" size="0.02" pos="-0.6 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_88" type="sphere" size="0.02" pos="-0.5 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_89" type="sphere" size="0.02" pos="-0.4 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_90" type="sphere" size="0.02" pos="-0.3 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_91" type="sphere" size="0.02" pos="-0.2 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_92" type="sphere" size="0.02" pos="-0.1 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_93" type="sphere" size="0.02" pos="0.0 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_94" type="sphere" size="0.02" pos="0.1 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_95" type="sphere" size="0.02" pos="0.2 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_96" type="sphere" size="0.02" pos="0.3 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_97" type="sphere" size="0.02" pos="0.4 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_98" type="sphere" size="0.02" pos="0.5 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_99" type="sphere" size="0.02" pos="0.6 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_100" type="sphere" size="0.02" pos="0.7 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_101" type="sphere" size="0.02" pos="0.8 0.0 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_102" type="sphere" size="0.02" pos="-0.8 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_103" type="sphere" size="0.02" pos="-0.7 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_104" type="sphere" size="0.02" pos="-0.6 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_105" type="sphere" size="0.02" pos="-0.5 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_106" type="sphere" size="0.02" pos="-0.4 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_107" type="sphere" size="0.02" pos="-0.3 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_108" type="sphere" size="0.02" pos="-0.2 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_109" type="sphere" size="0.02" pos="-0.1 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_110" type="sphere" size="0.02" pos="0.0 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_111" type="sphere" size="0.02" pos="0.1 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_112" type="sphere" size="0.02" pos="0.2 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_113" type="sphere" size="0.02" pos="0.3 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_114" type="sphere" size="0.02" pos="0.4 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_115" type="sphere" size="0.02" pos="0.5 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_116" type="sphere" size="0.02" pos="0.6 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_117" type="sphere" size="0.02" pos="0.7 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_118" type="sphere" size="0.02" pos="0.8 0.1 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_119" type="sphere" size="0.02" pos="-0.8 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_120" type="sphere" size="0.02" pos="-0.7 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_121" type="sphere" size="0.02" pos="-0.6 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_122" type="sphere" size="0.02" pos="-0.5 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_123" type="sphere" size="0.02" pos="-0.4 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_124" type="sphere" size="0.02" pos="-0.3 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_125" type="sphere" size="0.02" pos="-0.2 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_126" type="sphere" size="0.02" pos="-0.1 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_127" type="sphere" size="0.02" pos="0.0 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_128" type="sphere" size="0.02" pos="0.1 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_129" type="sphere" size="0.02" pos="0.2 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_130" type="sphere" size="0.02" pos="0.3 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_131" type="sphere" size="0.02" pos="0.4 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_132" type="sphere" size="0.02" pos="0.5 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_133" type="sphere" size="0.02" pos="0.6 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_134" type="sphere" size="0.02" pos="0.7 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_135" type="sphere" size="0.02" pos="0.8 0.2 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_136" type="sphere" size="0.02" pos="-0.8 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_137" type="sphere" size="0.02" pos="-0.7 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_138" type="sphere" size="0.02" pos="-0.6 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_139" type="sphere" size="0.02" pos="-0.5 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_140" type="sphere" size="0.02" pos="-0.4 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_141" type="sphere" size="0.02" pos="-0.3 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_142" type="sphere" size="0.02" pos="-0.2 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_143" type="sphere" size="0.02" pos="-0.1 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_144" type="sphere" size="0.02" pos="0.0 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_145" type="sphere" size="0.02" pos="0.1 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_146" type="sphere" size="0.02" pos="0.2 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_147" type="sphere" size="0.02" pos="0.3 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_148" type="sphere" size="0.02" pos="0.4 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_149" type="sphere" size="0.02" pos="0.5 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_150" type="sphere" size="0.02" pos="0.6 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_151" type="sphere" size="0.02" pos="0.7 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_152" type="sphere" size="0.02" pos="0.8 0.3 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_153" type="sphere" size="0.02" pos="-0.8 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_154" type="sphere" size="0.02" pos="-0.7 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_155" type="sphere" size="0.02" pos="-0.6 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_156" type="sphere" size="0.02" pos="-0.5 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_157" type="sphere" size="0.02" pos="-0.4 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_158" type="sphere" size="0.02" pos="-0.3 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_159" type="sphere" size="0.02" pos="-0.2 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_160" type="sphere" size="0.02" pos="-0.1 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_161" type="sphere" size="0.02" pos="0.0 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_162" type="sphere" size="0.02" pos="0.1 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_163" type="sphere" size="0.02" pos="0.2 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_164" type="sphere" size="0.02" pos="0.3 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_165" type="sphere" size="0.02" pos="0.4 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_166" type="sphere" size="0.02" pos="0.5 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_167" type="sphere" size="0.02" pos="0.6 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_168" type="sphere" size="0.02" pos="0.7 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_169" type="sphere" size="0.02" pos="0.8 0.4 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_170" type="sphere" size="0.02" pos="-0.8 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_171" type="sphere" size="0.02" pos="-0.7 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_172" type="sphere" size="0.02" pos="-0.6 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_173" type="sphere" size="0.02" pos="-0.5 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_174" type="sphere" size="0.02" pos="-0.4 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_175" type="sphere" size="0.02" pos="-0.3 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_176" type="sphere" size="0.02" pos="-0.2 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_177" type="sphere" size="0.02" pos="-0.1 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_178" type="sphere" size="0.02" pos="0.0 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_179" type="sphere" size="0.02" pos="0.1 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_180" type="sphere" size="0.02" pos="0.2 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_181" type="sphere" size="0.02" pos="0.3 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_182" type="sphere" size="0.02" pos="0.4 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_183" type="sphere" size="0.02" pos="0.5 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_184" type="sphere" size="0.02" pos="0.6 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_185" type="sphere" size="0.02" pos="0.7 0.5 20.0" zaxis="0 0 -1"/>
+      <site name="ray_site_186" type="sphere" size="0.02" pos="0.8 0.5 20.0" zaxis="0 0 -1"/>
+
+    </body><!-- /base_link -->
+  </worldbody>
+
+
+  <actuator>
+    <!-- ============================================================
+      Position-controlled PD motors for all 12 revolute joints
+      Torque limits (forcerange) tuned per-joint:
+        Hip roll:   ±60 Nm
+        Hip yaw:    ±40 Nm
+        Hip pitch:  ±100 Nm
+        Knee:       ±100 Nm
+        Ankle pitch: ±20 Nm
+        Ankle roll:  ±20 Nm
+    ============================================================ -->
+
+    <!-- Left Leg Actuators -->
+    <position name="act_left_hip_roll_joint"    joint="left_hip_roll_joint"
+              ctrlrange="-0.52 2.97"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_left_hip_yaw_joint"     joint="left_hip_yaw_joint"
+              ctrlrange="-2.76 2.76"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_left_hip_pitch_joint"   joint="left_hip_pitch_joint"
+              ctrlrange="-2.53 2.88"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_left_knee_joint"        joint="left_knee_joint"
+              ctrlrange="-0.09 2.88"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_left_ankle_pitch_joint" joint="left_ankle_pitch_joint"
+              ctrlrange="-0.87 0.52"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_left_ankle_roll_joint"  joint="left_ankle_roll_joint"
+              ctrlrange="-0.26 0.26"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+
+    <!-- Right Leg Actuators -->
+    <position name="act_right_hip_roll_joint"    joint="right_hip_roll_joint"
+              ctrlrange="-2.97 0.52"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_right_hip_yaw_joint"     joint="right_hip_yaw_joint"
+              ctrlrange="-2.76 2.76"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_right_hip_pitch_joint"   joint="right_hip_pitch_joint"
+              ctrlrange="-2.53 2.88"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_right_knee_joint"        joint="right_knee_joint"
+              ctrlrange="-0.09 2.88"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_right_ankle_pitch_joint" joint="right_ankle_pitch_joint"
+              ctrlrange="-0.87 0.52"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+    <position name="act_right_ankle_roll_joint"  joint="right_ankle_roll_joint"
+              ctrlrange="-0.26 0.26"  kp="50.0" kv="0.3" forcerange="-200.0 200.0"/>
+  </actuator>
+
+
+  <sensor>
+    <actuatorfrc name="sen_left_hip_roll_joint_trq"    actuator="act_left_hip_roll_joint"/>
+    <actuatorfrc name="sen_left_hip_yaw_joint_trq"     actuator="act_left_hip_yaw_joint"/>
+    <actuatorfrc name="sen_left_hip_pitch_joint_trq"   actuator="act_left_hip_pitch_joint"/>
+    <actuatorfrc name="sen_left_knee_joint_trq"        actuator="act_left_knee_joint"/>
+    <actuatorfrc name="sen_left_ankle_pitch_joint_trq" actuator="act_left_ankle_pitch_joint"/>
+    <actuatorfrc name="sen_left_ankle_roll_joint_trq"  actuator="act_left_ankle_roll_joint"/>
+
+    <actuatorfrc name="sen_right_hip_roll_joint_trq"    actuator="act_right_hip_roll_joint"/>
+    <actuatorfrc name="sen_right_hip_yaw_joint_trq"     actuator="act_right_hip_yaw_joint"/>
+    <actuatorfrc name="sen_right_hip_pitch_joint_trq"   actuator="act_right_hip_pitch_joint"/>
+    <actuatorfrc name="sen_right_knee_joint_trq"        actuator="act_right_knee_joint"/>
+    <actuatorfrc name="sen_right_ankle_pitch_joint_trq" actuator="act_right_ankle_pitch_joint"/>
+    <actuatorfrc name="sen_right_ankle_roll_joint_trq"  actuator="act_right_ankle_roll_joint"/>
+
+    <!-- ========== Ray Scanner Sensors (187 rangefinders) ========== -->
+    <rangefinder name="ray_sensor_0" site="ray_site_0"/>
+    <rangefinder name="ray_sensor_1" site="ray_site_1"/>
+    <rangefinder name="ray_sensor_2" site="ray_site_2"/>
+    <rangefinder name="ray_sensor_3" site="ray_site_3"/>
+    <rangefinder name="ray_sensor_4" site="ray_site_4"/>
+    <rangefinder name="ray_sensor_5" site="ray_site_5"/>
+    <rangefinder name="ray_sensor_6" site="ray_site_6"/>
+    <rangefinder name="ray_sensor_7" site="ray_site_7"/>
+    <rangefinder name="ray_sensor_8" site="ray_site_8"/>
+    <rangefinder name="ray_sensor_9" site="ray_site_9"/>
+    <rangefinder name="ray_sensor_10" site="ray_site_10"/>
+    <rangefinder name="ray_sensor_11" site="ray_site_11"/>
+    <rangefinder name="ray_sensor_12" site="ray_site_12"/>
+    <rangefinder name="ray_sensor_13" site="ray_site_13"/>
+    <rangefinder name="ray_sensor_14" site="ray_site_14"/>
+    <rangefinder name="ray_sensor_15" site="ray_site_15"/>
+    <rangefinder name="ray_sensor_16" site="ray_site_16"/>
+    <rangefinder name="ray_sensor_17" site="ray_site_17"/>
+    <rangefinder name="ray_sensor_18" site="ray_site_18"/>
+    <rangefinder name="ray_sensor_19" site="ray_site_19"/>
+    <rangefinder name="ray_sensor_20" site="ray_site_20"/>
+    <rangefinder name="ray_sensor_21" site="ray_site_21"/>
+    <rangefinder name="ray_sensor_22" site="ray_site_22"/>
+    <rangefinder name="ray_sensor_23" site="ray_site_23"/>
+    <rangefinder name="ray_sensor_24" site="ray_site_24"/>
+    <rangefinder name="ray_sensor_25" site="ray_site_25"/>
+    <rangefinder name="ray_sensor_26" site="ray_site_26"/>
+    <rangefinder name="ray_sensor_27" site="ray_site_27"/>
+    <rangefinder name="ray_sensor_28" site="ray_site_28"/>
+    <rangefinder name="ray_sensor_29" site="ray_site_29"/>
+    <rangefinder name="ray_sensor_30" site="ray_site_30"/>
+    <rangefinder name="ray_sensor_31" site="ray_site_31"/>
+    <rangefinder name="ray_sensor_32" site="ray_site_32"/>
+    <rangefinder name="ray_sensor_33" site="ray_site_33"/>
+    <rangefinder name="ray_sensor_34" site="ray_site_34"/>
+    <rangefinder name="ray_sensor_35" site="ray_site_35"/>
+    <rangefinder name="ray_sensor_36" site="ray_site_36"/>
+    <rangefinder name="ray_sensor_37" site="ray_site_37"/>
+    <rangefinder name="ray_sensor_38" site="ray_site_38"/>
+    <rangefinder name="ray_sensor_39" site="ray_site_39"/>
+    <rangefinder name="ray_sensor_40" site="ray_site_40"/>
+    <rangefinder name="ray_sensor_41" site="ray_site_41"/>
+    <rangefinder name="ray_sensor_42" site="ray_site_42"/>
+    <rangefinder name="ray_sensor_43" site="ray_site_43"/>
+    <rangefinder name="ray_sensor_44" site="ray_site_44"/>
+    <rangefinder name="ray_sensor_45" site="ray_site_45"/>
+    <rangefinder name="ray_sensor_46" site="ray_site_46"/>
+    <rangefinder name="ray_sensor_47" site="ray_site_47"/>
+    <rangefinder name="ray_sensor_48" site="ray_site_48"/>
+    <rangefinder name="ray_sensor_49" site="ray_site_49"/>
+    <rangefinder name="ray_sensor_50" site="ray_site_50"/>
+    <rangefinder name="ray_sensor_51" site="ray_site_51"/>
+    <rangefinder name="ray_sensor_52" site="ray_site_52"/>
+    <rangefinder name="ray_sensor_53" site="ray_site_53"/>
+    <rangefinder name="ray_sensor_54" site="ray_site_54"/>
+    <rangefinder name="ray_sensor_55" site="ray_site_55"/>
+    <rangefinder name="ray_sensor_56" site="ray_site_56"/>
+    <rangefinder name="ray_sensor_57" site="ray_site_57"/>
+    <rangefinder name="ray_sensor_58" site="ray_site_58"/>
+    <rangefinder name="ray_sensor_59" site="ray_site_59"/>
+    <rangefinder name="ray_sensor_60" site="ray_site_60"/>
+    <rangefinder name="ray_sensor_61" site="ray_site_61"/>
+    <rangefinder name="ray_sensor_62" site="ray_site_62"/>
+    <rangefinder name="ray_sensor_63" site="ray_site_63"/>
+    <rangefinder name="ray_sensor_64" site="ray_site_64"/>
+    <rangefinder name="ray_sensor_65" site="ray_site_65"/>
+    <rangefinder name="ray_sensor_66" site="ray_site_66"/>
+    <rangefinder name="ray_sensor_67" site="ray_site_67"/>
+    <rangefinder name="ray_sensor_68" site="ray_site_68"/>
+    <rangefinder name="ray_sensor_69" site="ray_site_69"/>
+    <rangefinder name="ray_sensor_70" site="ray_site_70"/>
+    <rangefinder name="ray_sensor_71" site="ray_site_71"/>
+    <rangefinder name="ray_sensor_72" site="ray_site_72"/>
+    <rangefinder name="ray_sensor_73" site="ray_site_73"/>
+    <rangefinder name="ray_sensor_74" site="ray_site_74"/>
+    <rangefinder name="ray_sensor_75" site="ray_site_75"/>
+    <rangefinder name="ray_sensor_76" site="ray_site_76"/>
+    <rangefinder name="ray_sensor_77" site="ray_site_77"/>
+    <rangefinder name="ray_sensor_78" site="ray_site_78"/>
+    <rangefinder name="ray_sensor_79" site="ray_site_79"/>
+    <rangefinder name="ray_sensor_80" site="ray_site_80"/>
+    <rangefinder name="ray_sensor_81" site="ray_site_81"/>
+    <rangefinder name="ray_sensor_82" site="ray_site_82"/>
+    <rangefinder name="ray_sensor_83" site="ray_site_83"/>
+    <rangefinder name="ray_sensor_84" site="ray_site_84"/>
+    <rangefinder name="ray_sensor_85" site="ray_site_85"/>
+    <rangefinder name="ray_sensor_86" site="ray_site_86"/>
+    <rangefinder name="ray_sensor_87" site="ray_site_87"/>
+    <rangefinder name="ray_sensor_88" site="ray_site_88"/>
+    <rangefinder name="ray_sensor_89" site="ray_site_89"/>
+    <rangefinder name="ray_sensor_90" site="ray_site_90"/>
+    <rangefinder name="ray_sensor_91" site="ray_site_91"/>
+    <rangefinder name="ray_sensor_92" site="ray_site_92"/>
+    <rangefinder name="ray_sensor_93" site="ray_site_93"/>
+    <rangefinder name="ray_sensor_94" site="ray_site_94"/>
+    <rangefinder name="ray_sensor_95" site="ray_site_95"/>
+    <rangefinder name="ray_sensor_96" site="ray_site_96"/>
+    <rangefinder name="ray_sensor_97" site="ray_site_97"/>
+    <rangefinder name="ray_sensor_98" site="ray_site_98"/>
+    <rangefinder name="ray_sensor_99" site="ray_site_99"/>
+    <rangefinder name="ray_sensor_100" site="ray_site_100"/>
+    <rangefinder name="ray_sensor_101" site="ray_site_101"/>
+    <rangefinder name="ray_sensor_102" site="ray_site_102"/>
+    <rangefinder name="ray_sensor_103" site="ray_site_103"/>
+    <rangefinder name="ray_sensor_104" site="ray_site_104"/>
+    <rangefinder name="ray_sensor_105" site="ray_site_105"/>
+    <rangefinder name="ray_sensor_106" site="ray_site_106"/>
+    <rangefinder name="ray_sensor_107" site="ray_site_107"/>
+    <rangefinder name="ray_sensor_108" site="ray_site_108"/>
+    <rangefinder name="ray_sensor_109" site="ray_site_109"/>
+    <rangefinder name="ray_sensor_110" site="ray_site_110"/>
+    <rangefinder name="ray_sensor_111" site="ray_site_111"/>
+    <rangefinder name="ray_sensor_112" site="ray_site_112"/>
+    <rangefinder name="ray_sensor_113" site="ray_site_113"/>
+    <rangefinder name="ray_sensor_114" site="ray_site_114"/>
+    <rangefinder name="ray_sensor_115" site="ray_site_115"/>
+    <rangefinder name="ray_sensor_116" site="ray_site_116"/>
+    <rangefinder name="ray_sensor_117" site="ray_site_117"/>
+    <rangefinder name="ray_sensor_118" site="ray_site_118"/>
+    <rangefinder name="ray_sensor_119" site="ray_site_119"/>
+    <rangefinder name="ray_sensor_120" site="ray_site_120"/>
+    <rangefinder name="ray_sensor_121" site="ray_site_121"/>
+    <rangefinder name="ray_sensor_122" site="ray_site_122"/>
+    <rangefinder name="ray_sensor_123" site="ray_site_123"/>
+    <rangefinder name="ray_sensor_124" site="ray_site_124"/>
+    <rangefinder name="ray_sensor_125" site="ray_site_125"/>
+    <rangefinder name="ray_sensor_126" site="ray_site_126"/>
+    <rangefinder name="ray_sensor_127" site="ray_site_127"/>
+    <rangefinder name="ray_sensor_128" site="ray_site_128"/>
+    <rangefinder name="ray_sensor_129" site="ray_site_129"/>
+    <rangefinder name="ray_sensor_130" site="ray_site_130"/>
+    <rangefinder name="ray_sensor_131" site="ray_site_131"/>
+    <rangefinder name="ray_sensor_132" site="ray_site_132"/>
+    <rangefinder name="ray_sensor_133" site="ray_site_133"/>
+    <rangefinder name="ray_sensor_134" site="ray_site_134"/>
+    <rangefinder name="ray_sensor_135" site="ray_site_135"/>
+    <rangefinder name="ray_sensor_136" site="ray_site_136"/>
+    <rangefinder name="ray_sensor_137" site="ray_site_137"/>
+    <rangefinder name="ray_sensor_138" site="ray_site_138"/>
+    <rangefinder name="ray_sensor_139" site="ray_site_139"/>
+    <rangefinder name="ray_sensor_140" site="ray_site_140"/>
+    <rangefinder name="ray_sensor_141" site="ray_site_141"/>
+    <rangefinder name="ray_sensor_142" site="ray_site_142"/>
+    <rangefinder name="ray_sensor_143" site="ray_site_143"/>
+    <rangefinder name="ray_sensor_144" site="ray_site_144"/>
+    <rangefinder name="ray_sensor_145" site="ray_site_145"/>
+    <rangefinder name="ray_sensor_146" site="ray_site_146"/>
+    <rangefinder name="ray_sensor_147" site="ray_site_147"/>
+    <rangefinder name="ray_sensor_148" site="ray_site_148"/>
+    <rangefinder name="ray_sensor_149" site="ray_site_149"/>
+    <rangefinder name="ray_sensor_150" site="ray_site_150"/>
+    <rangefinder name="ray_sensor_151" site="ray_site_151"/>
+    <rangefinder name="ray_sensor_152" site="ray_site_152"/>
+    <rangefinder name="ray_sensor_153" site="ray_site_153"/>
+    <rangefinder name="ray_sensor_154" site="ray_site_154"/>
+    <rangefinder name="ray_sensor_155" site="ray_site_155"/>
+    <rangefinder name="ray_sensor_156" site="ray_site_156"/>
+    <rangefinder name="ray_sensor_157" site="ray_site_157"/>
+    <rangefinder name="ray_sensor_158" site="ray_site_158"/>
+    <rangefinder name="ray_sensor_159" site="ray_site_159"/>
+    <rangefinder name="ray_sensor_160" site="ray_site_160"/>
+    <rangefinder name="ray_sensor_161" site="ray_site_161"/>
+    <rangefinder name="ray_sensor_162" site="ray_site_162"/>
+    <rangefinder name="ray_sensor_163" site="ray_site_163"/>
+    <rangefinder name="ray_sensor_164" site="ray_site_164"/>
+    <rangefinder name="ray_sensor_165" site="ray_site_165"/>
+    <rangefinder name="ray_sensor_166" site="ray_site_166"/>
+    <rangefinder name="ray_sensor_167" site="ray_site_167"/>
+    <rangefinder name="ray_sensor_168" site="ray_site_168"/>
+    <rangefinder name="ray_sensor_169" site="ray_site_169"/>
+    <rangefinder name="ray_sensor_170" site="ray_site_170"/>
+    <rangefinder name="ray_sensor_171" site="ray_site_171"/>
+    <rangefinder name="ray_sensor_172" site="ray_site_172"/>
+    <rangefinder name="ray_sensor_173" site="ray_site_173"/>
+    <rangefinder name="ray_sensor_174" site="ray_site_174"/>
+    <rangefinder name="ray_sensor_175" site="ray_site_175"/>
+    <rangefinder name="ray_sensor_176" site="ray_site_176"/>
+    <rangefinder name="ray_sensor_177" site="ray_site_177"/>
+    <rangefinder name="ray_sensor_178" site="ray_site_178"/>
+    <rangefinder name="ray_sensor_179" site="ray_site_179"/>
+    <rangefinder name="ray_sensor_180" site="ray_site_180"/>
+    <rangefinder name="ray_sensor_181" site="ray_site_181"/>
+    <rangefinder name="ray_sensor_182" site="ray_site_182"/>
+    <rangefinder name="ray_sensor_183" site="ray_site_183"/>
+    <rangefinder name="ray_sensor_184" site="ray_site_184"/>
+    <rangefinder name="ray_sensor_185" site="ray_site_185"/>
+    <rangefinder name="ray_sensor_186" site="ray_site_186"/>
+
+
+
+
+
+
+  </sensor>
+</mujoco>

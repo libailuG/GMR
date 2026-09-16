@@ -15,10 +15,15 @@
     空格      暂停/播放
     左/右方向键  前一帧/后一帧
     R         回到命令行指定的起始帧
+
+时间轴窗口：
+    拖动滑块可跳转到任意帧，并可使用播放、逐帧和复位按钮。
 """
 
 import argparse
 import time
+import tkinter as tk
+from tkinter import ttk
 
 import glfw
 import mujoco as mj
@@ -167,6 +172,8 @@ def main():
         raise ValueError(f"--frame 应在 0 到 {len(frames) - 1} 之间")
     if args.body not in frames[0]:
         raise ValueError(f"未知身体部位 {args.body!r}，可用名称：{list(frames[0])}")
+    if args.fps <= 0:
+        raise ValueError(f"--fps 必须大于 0，实际为 {args.fps}")
 
     # 创建一个只有地面和灯光的简单 MuJoCo 场景，避免机器人遮挡人体坐标。
     scene_xml = """
@@ -187,7 +194,106 @@ def main():
         "frame": args.frame,
         "start_frame": args.frame,
         "playing": args.play,
+        "ui_open": True,
+        "programmatic_slider": False,
     }
+
+    # 时间轴窗口与 MuJoCo 共用主线程。MuJoCo 主循环会持续处理 Tk 事件，
+    # 所以拖动滑块时三维画面也能立即更新。
+    root = tk.Tk()
+    root.title("人体动作时间轴")
+    root.geometry("900x180")
+    root.minsize(650, 170)
+
+    frame_var = tk.IntVar(value=args.frame)
+    frame_text = tk.StringVar()
+    play_button_text = tk.StringVar(value="暂停" if args.play else "播放")
+
+    def update_timeline_labels():
+        current = state["frame"]
+        frame_text.set(
+            f"当前帧：{current} / {len(frames) - 1}    "
+            f"时间：{current / args.fps:.2f}s / "
+            f"{(len(frames) - 1) / args.fps:.2f}s    FPS：{args.fps:g}"
+        )
+
+    def sync_timeline_to_state():
+        """把键盘和自动播放产生的帧变化同步到滑块。"""
+        state["programmatic_slider"] = True
+        timeline.set(state["frame"])
+        state["programmatic_slider"] = False
+        update_timeline_labels()
+
+    def pause():
+        state["playing"] = False
+        play_button_text.set("播放")
+
+    def set_frame(frame, *, pause_playback=True):
+        if pause_playback:
+            pause()
+        state["frame"] = int(np.clip(frame, 0, len(frames) - 1))
+        sync_timeline_to_state()
+
+    def toggle_play():
+        state["playing"] = not state["playing"]
+        play_button_text.set("暂停" if state["playing"] else "播放")
+
+    def on_slider(value):
+        # timeline.set() 在部分 Tk 版本中会延迟触发 command。播放期间的
+        # 回调来自程序同步，必须忽略，否则会在播放一帧后被误暂停。
+        # 真正用鼠标拖动时，ButtonPress 事件会先调用 pause()。
+        if state["programmatic_slider"] or state["playing"]:
+            return
+        pause()
+        state["frame"] = int(float(value))
+        update_timeline_labels()
+
+    def close_timeline():
+        state["ui_open"] = False
+        root.destroy()
+
+    root.protocol("WM_DELETE_WINDOW", close_timeline)
+
+    panel = ttk.Frame(root, padding=12)
+    panel.pack(fill=tk.BOTH, expand=True)
+    ttk.Label(panel, textvariable=frame_text).pack(anchor=tk.W)
+
+    timeline = tk.Scale(
+        panel,
+        from_=0,
+        to=len(frames) - 1,
+        orient=tk.HORIZONTAL,
+        variable=frame_var,
+        command=on_slider,
+        resolution=1,
+        showvalue=False,
+        length=850,
+    )
+    timeline.pack(fill=tk.X, pady=(2, 10))
+    timeline.bind("<ButtonPress-1>", lambda _event: pause())
+
+    controls = ttk.Frame(panel)
+    controls.pack(fill=tk.X)
+    ttk.Button(
+        controls, textvariable=play_button_text, command=toggle_play
+    ).pack(side=tk.LEFT)
+    ttk.Button(
+        controls,
+        text="上一帧",
+        command=lambda: set_frame(state["frame"] - 1),
+    ).pack(side=tk.LEFT, padx=(6, 0))
+    ttk.Button(
+        controls,
+        text="下一帧",
+        command=lambda: set_frame(state["frame"] + 1),
+    ).pack(side=tk.LEFT, padx=(6, 0))
+    ttk.Button(
+        controls,
+        text="回到起始帧",
+        command=lambda: set_frame(state["start_frame"]),
+    ).pack(side=tk.LEFT, padx=(6, 0))
+    ttk.Label(controls, text="拖动滑块会自动暂停播放").pack(side=tk.RIGHT)
+    update_timeline_labels()
 
     def on_key(keycode):
         if keycode == glfw.KEY_SPACE:
@@ -217,20 +323,40 @@ def main():
         viewer.cam.azimuth = 135
         viewer.cam.elevation = -15
 
-        while viewer.is_running():
-            loop_start = time.perf_counter()
-            frame = frames[state["frame"]]
-            viewer.cam.lookat = frame["Hips"][0]
+        try:
+            while viewer.is_running() and state["ui_open"]:
+                loop_start = time.perf_counter()
 
-            draw_human(viewer, frame, args.body, args.axis_size, args.all_axes)
-            viewer.sync()
+                # 处理滑块和按钮事件，不启动第二个阻塞式 GUI 主循环。
+                try:
+                    root.update_idletasks()
+                    root.update()
+                except tk.TclError:
+                    state["ui_open"] = False
+                    break
+                if not state["ui_open"]:
+                    break
 
-            if state["playing"]:
-                state["frame"] = (state["frame"] + 1) % len(frames)
+                frame = frames[state["frame"]]
+                viewer.cam.lookat = frame["Hips"][0]
 
-            remaining = 1.0 / args.fps - (time.perf_counter() - loop_start)
-            if remaining > 0:
-                time.sleep(remaining)
+                draw_human(viewer, frame, args.body, args.axis_size, args.all_axes)
+                viewer.sync()
+
+                if state["playing"]:
+                    state["frame"] = (state["frame"] + 1) % len(frames)
+
+                # 键盘和自动播放都会在这里更新滑块及按钮文字。
+                sync_timeline_to_state()
+                play_button_text.set("暂停" if state["playing"] else "播放")
+
+                remaining = 1.0 / args.fps - (time.perf_counter() - loop_start)
+                if remaining > 0:
+                    time.sleep(remaining)
+        finally:
+            if state["ui_open"]:
+                state["ui_open"] = False
+                root.destroy()
 
 
 if __name__ == "__main__":

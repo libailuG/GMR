@@ -1,0 +1,72 @@
+{
+    "robot_root_name": "PelvisLink",
+    "human_root_name": "Hips",
+    "ground_height": 0.0,
+    "human_height_assumption": 1.75,
+    "use_ik_match_table1": true,
+    "use_ik_match_table2": true,
+    "human_scale_table": {
+        "Hips": 1.0,
+        "Spine1": 1.0,
+        "Spine2": 1.0,
+        "Head": 1.0,
+        "LeftArm": 1.0,
+        "LeftForeArm": 1.0,
+        "LeftHand": 1.0,
+        "RightArm": 1.0,
+        "RightForeArm": 1.0,
+        "RightHand": 1.0,
+        "LeftUpLeg": 1.0,
+        "LeftLeg": 1.0,
+        "LeftFootMod": 1.0,
+        "LeftToe": 1.0,
+        "RightUpLeg": 1.0,
+        "RightLeg": 1.0,
+        "RightFootMod": 1.0,
+        "RightToe": 1.0
+    },
+    "ik_match_table1": {
+        "PelvisLink": ["Hips", 0, 20, [0, 0, 0], [0.5, 0.5, 0.5, 0.5]],
+        "TorsoLink": ["Spine1", 0, 8, [0, 0, 0], [0.5, 0.5, 0.5, 0.5]],
+        "ChestLink": ["Spine2", 0, 15, [0, 0, 0], [0.5, 0.5, 0.5, 0.5]],
+        "HeadLink": ["Head", 0, 5, [0, 0, 0], [0.5, 0.5, 0.5, 0.5]],
+
+        "LeftUpperArmLink": ["LeftArm", 0, 3, [0, 0, 0], [0.5, 0.5, -0.5, -0.5]],
+        "LeftForearmLink": ["LeftForeArm", 50, 2, [0, 0, 0], [0.70710678, 0.70710678, 0, 0]],
+        "LeftHandLink": ["LeftHand", 80, 0, [0, 0, 0], [0.70710678, 0.70710678, 0, 0]],
+        "RightUpperArmLink": ["RightArm", 0, 3, [0, 0, 0], [0.5, 0.5, -0.5, -0.5]],
+        "RightForearmLink": ["RightForeArm", 50, 2, [0, 0, 0], [0.70710678, 0.70710678, 0, 0]],
+        "RightHandLink": ["RightHand", 80, 0, [0, 0, 0], [0.70710678, 0.70710678, 0, 0]],
+
+        "LeftThighLink": ["LeftUpLeg", 0, 20, [0, 0, 0], [-0.5, 0.5, 0.5, -0.5]],
+        "LeftShinLink": ["LeftLeg", 0, 15, [0, 0, 0], [-0.5, 0.5, 0.5, -0.5]],
+        "LeftFootLink": ["LeftFootMod", 40, 15, [0, 0, 0], [-0.70710678, 0.70710678, 0, 0]],
+        "LeftForefootLink": ["LeftToe", 10, 5, [0, 0, 0], [-0.70710678, 0.70710678, 0, 0]],
+        "RightThighLink": ["RightUpLeg", 0, 20, [0, 0, 0], [-0.5, 0.5, 0.5, -0.5]],
+        "RightShinLink": ["RightLeg", 0, 15, [0, 0, 0], [-0.5, 0.5, 0.5, -0.5]],
+        "RightFootLink": ["RightFootMod", 40, 15, [0, 0, 0], [-0.70710678, 0.70710678, 0, 0]],
+        "RightForefootLink": ["RightToe", 10, 5, [0, 0, 0], [-0.70710678, 0.70710678, 0, 0]]
+    },
+    "ik_match_table2": {
+        "PelvisLink": ["Hips", 100, 10, [0, 0, 0], [0.5, 0.5, 0.5, 0.5]],
+        "TorsoLink": ["Spine1", 2, 5, [0, 0, 0], [0.5, 0.5, 0.5, 0.5]],
+        "ChestLink": ["Spine2", 5, 10, [0, 0, 0], [0.5, 0.5, 0.5, 0.5]],
+        "HeadLink": ["Head", 2, 3, [0, 0, 0], [0.5, 0.5, 0.5, 0.5]],
+
+        "LeftUpperArmLink": ["LeftArm", 0, 2, [0, 0, 0], [0.5, 0.5, -0.5, -0.5]],
+        "LeftForearmLink": ["LeftForeArm", 80, 1, [0, 0, 0], [0.70710678, 0.70710678, 0, 0]],
+        "LeftHandLink": ["LeftHand", 100, 0, [0, 0, 0], [0.70710678, 0.70710678, 0, 0]],
+        "RightUpperArmLink": ["RightArm", 0, 2, [0, 0, 0], [0.5, 0.5, -0.5, -0.5]],
+        "RightForearmLink": ["RightForeArm", 80, 1, [0, 0, 0], [0.70710678, 0.70710678, 0, 0]],
+        "RightHandLink": ["RightHand", 100, 0, [0, 0, 0], [0.70710678, 0.70710678, 0, 0]],
+
+        "LeftThighLink": ["LeftUpLeg", 0, 10, [0, 0, 0], [-0.5, 0.5, 0.5, -0.5]],
+        "LeftShinLink": ["LeftLeg", 8, 8, [0, 0, 0], [-0.5, 0.5, 0.5, -0.5]],
+        "LeftFootLink": ["LeftFootMod", 50, 10, [0, 0, 0], [-0.70710678, 0.70710678, 0, 0]],
+        "LeftForefootLink": ["LeftToe", 15, 3, [0, 0, 0], [-0.70710678, 0.70710678, 0, 0]],
+        "RightThighLink": ["RightUpLeg", 0, 10, [0, 0, 0], [-0.5, 0.5, 0.5, -0.5]],
+        "RightShinLink": ["RightLeg", 8, 8, [0, 0, 0], [-0.5, 0.5, 0.5, -0.5]],
+        "RightFootLink": ["RightFootMod", 50, 10, [0, 0, 0], [-0.70710678, 0.70710678, 0, 0]],
+        "RightForefootLink": ["RightToe", 15, 3, [0, 0, 0], [-0.70710678, 0.70710678, 0, 0]]
+    }
+}

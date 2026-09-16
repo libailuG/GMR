@@ -1,0 +1,613 @@
+<!-- ============================================================
+  MuJoCo XML for Unitree A2 (Biped Configuration)
+  Converted from a2.urdf (SolidWorks export)
+
+  Legs: 2 (right + left), 6 DOF per leg = 12 actuated joints
+  Sensors: joint encoders, IMU, foot contact, actuator force
+  Actuators: position-controlled PD motors on all revolute joints
+============================================================ -->
+
+<mujoco model="a2">
+
+  <!-- ========== Compiler & Options ========== -->
+  <compiler angle="radian" meshdir="../meshes"/>
+
+  <option timestep="0.005" gravity="0 0 -9.81">
+    <!-- <flag contactparam="enable"/> -->
+  </option>
+
+  <default>
+
+    <joint damping="0.1" armature="0.000"/>
+    <!-- <motor ctrlrange="-1 1" ctrllimited="false"/> -->
+
+    <default class="gemo_visual">  <!-- 只显示,不参与碰撞 -->
+      <geom contype="0" conaffinity="0"/>
+    </default>
+
+    <default class="gemo_collision">  <!-- 只参与碰撞 -->
+      <geom contype="0" conaffinity="1" group="3"/>
+    </default>
+
+  </default>
+
+  <!-- ========== Assets (STL Meshes) ========== -->
+  <asset>
+    <mesh name="mesh_base"            file="base_link.STL"/>
+    <mesh name="mesh_l_hip_roll"      file="left_hip_roll_link.STL"/>
+    <mesh name="mesh_l_hip_yaw"       file="left_hip_yaw_link.STL"/>
+    <mesh name="mesh_l_hip_pitch"     file="left_hip_pitch_link.STL"/>
+    <mesh name="mesh_l_knee"          file="left_knee_link.STL"/>
+    <mesh name="mesh_l_ankle_pitch"   file="left_ankle_pitch_link.STL"/>
+    <mesh name="mesh_l_ankle_roll"    file="left_ankle_roll_link.STL"/>
+    <mesh name="mesh_r_hip_roll"      file="right_hip_roll_link.STL"/>
+    <mesh name="mesh_r_hip_yaw"       file="right_hip_yaw_link.STL"/>
+    <mesh name="mesh_r_hip_pitch"     file="right_hip_pitch_link.STL"/>
+    <mesh name="mesh_r_knee"          file="right_knee_link.STL"/>
+    <mesh name="mesh_r_ankle_pitch"   file="right_ankle_pitch_link.STL"/>
+    <mesh name="mesh_r_ankle_roll"    file="right_ankle_roll_link.STL"/>
+  </asset>
+
+  <asset>
+      <texture name='texture_plane' type='2d' builtin='checker' rgb1='0.2745 0.5098 0.7059' rgb2='0.5294 0.8078 0.9804' width='128' height='128'/>
+      <material name='material_plane' reflectance='0.0' texture='texture_plane' texrepeat='1 1' texuniform='true'/>
+      <material name="gray" rgba="0.3 0.3 0.3 1"/>
+      <material name="blue" rgba="0 0 1 1"/>
+      <material name="red" rgba="1 0 0 1"/>
+      <material name="green" rgba="0 1 0 1"/>
+  </asset>
+
+  <!-- ========== Worldbody ========== -->
+  <worldbody>
+    <geom name="floor" type="plane" conaffinity="2" size="100 100 .2" material="material_plane"/>
+       <light directional="true" ambient=".3 .3 .3" pos="30 30 30" dir="0 -.5 -1"
+                    diffuse=".5 .5 .5" specular=".5 .5 .5" />
+
+
+    <body name="base_link" pos="0 0 1.0" euler="0 0 0">
+      <freejoint name="base_free"/>
+      <inertial pos="-0.14464 0 0.63562" mass="1.6082" fullinertia="1.6349 1.6777 0.06302 0 0.2309 0"/>
+      <geom class="gemo_visual" type="mesh" mesh="mesh_base" rgba="1 0 0 1"/>
+      <geom class="gemo_collision" type="box" size="0.2 0.15 0.75" pos="-0.2 0 0.75"/>
+
+      <site name="ray_0_0" type="sphere" size="0.008" pos="-0.8 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_1" type="sphere" size="0.008" pos="-0.8 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_2" type="sphere" size="0.008" pos="-0.8 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_3" type="sphere" size="0.008" pos="-0.8 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_4" type="sphere" size="0.008" pos="-0.8 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_5" type="sphere" size="0.008" pos="-0.8 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_6" type="sphere" size="0.008" pos="-0.8 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_7" type="sphere" size="0.008" pos="-0.8 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_8" type="sphere" size="0.008" pos="-0.8 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_9" type="sphere" size="0.008" pos="-0.8 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_0_10" type="sphere" size="0.008" pos="-0.8 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_0" type="sphere" size="0.008" pos="-0.7 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_1" type="sphere" size="0.008" pos="-0.7 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_2" type="sphere" size="0.008" pos="-0.7 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_3" type="sphere" size="0.008" pos="-0.7 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_4" type="sphere" size="0.008" pos="-0.7 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_5" type="sphere" size="0.008" pos="-0.7 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_6" type="sphere" size="0.008" pos="-0.7 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_7" type="sphere" size="0.008" pos="-0.7 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_8" type="sphere" size="0.008" pos="-0.7 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_9" type="sphere" size="0.008" pos="-0.7 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_1_10" type="sphere" size="0.008" pos="-0.7 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_0" type="sphere" size="0.008" pos="-0.6 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_1" type="sphere" size="0.008" pos="-0.6 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_2" type="sphere" size="0.008" pos="-0.6 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_3" type="sphere" size="0.008" pos="-0.6 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_4" type="sphere" size="0.008" pos="-0.6 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_5" type="sphere" size="0.008" pos="-0.6 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_6" type="sphere" size="0.008" pos="-0.6 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_7" type="sphere" size="0.008" pos="-0.6 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_8" type="sphere" size="0.008" pos="-0.6 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_9" type="sphere" size="0.008" pos="-0.6 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_2_10" type="sphere" size="0.008" pos="-0.6 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_0" type="sphere" size="0.008" pos="-0.5 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_1" type="sphere" size="0.008" pos="-0.5 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_2" type="sphere" size="0.008" pos="-0.5 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_3" type="sphere" size="0.008" pos="-0.5 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_4" type="sphere" size="0.008" pos="-0.5 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_5" type="sphere" size="0.008" pos="-0.5 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_6" type="sphere" size="0.008" pos="-0.5 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_7" type="sphere" size="0.008" pos="-0.5 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_8" type="sphere" size="0.008" pos="-0.5 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_9" type="sphere" size="0.008" pos="-0.5 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_3_10" type="sphere" size="0.008" pos="-0.5 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_0" type="sphere" size="0.008" pos="-0.4 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_1" type="sphere" size="0.008" pos="-0.4 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_2" type="sphere" size="0.008" pos="-0.4 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_3" type="sphere" size="0.008" pos="-0.4 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_4" type="sphere" size="0.008" pos="-0.4 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_5" type="sphere" size="0.008" pos="-0.4 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_6" type="sphere" size="0.008" pos="-0.4 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_7" type="sphere" size="0.008" pos="-0.4 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_8" type="sphere" size="0.008" pos="-0.4 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_9" type="sphere" size="0.008" pos="-0.4 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_4_10" type="sphere" size="0.008" pos="-0.4 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_0" type="sphere" size="0.008" pos="-0.3 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_1" type="sphere" size="0.008" pos="-0.3 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_2" type="sphere" size="0.008" pos="-0.3 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_3" type="sphere" size="0.008" pos="-0.3 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_4" type="sphere" size="0.008" pos="-0.3 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_5" type="sphere" size="0.008" pos="-0.3 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_6" type="sphere" size="0.008" pos="-0.3 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_7" type="sphere" size="0.008" pos="-0.3 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_8" type="sphere" size="0.008" pos="-0.3 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_9" type="sphere" size="0.008" pos="-0.3 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_5_10" type="sphere" size="0.008" pos="-0.3 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_0" type="sphere" size="0.008" pos="-0.2 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_1" type="sphere" size="0.008" pos="-0.2 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_2" type="sphere" size="0.008" pos="-0.2 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_3" type="sphere" size="0.008" pos="-0.2 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_4" type="sphere" size="0.008" pos="-0.2 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_5" type="sphere" size="0.008" pos="-0.2 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_6" type="sphere" size="0.008" pos="-0.2 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_7" type="sphere" size="0.008" pos="-0.2 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_8" type="sphere" size="0.008" pos="-0.2 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_9" type="sphere" size="0.008" pos="-0.2 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_6_10" type="sphere" size="0.008" pos="-0.2 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_0" type="sphere" size="0.008" pos="-0.1 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_1" type="sphere" size="0.008" pos="-0.1 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_2" type="sphere" size="0.008" pos="-0.1 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_3" type="sphere" size="0.008" pos="-0.1 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_4" type="sphere" size="0.008" pos="-0.1 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_5" type="sphere" size="0.008" pos="-0.1 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_6" type="sphere" size="0.008" pos="-0.1 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_7" type="sphere" size="0.008" pos="-0.1 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_8" type="sphere" size="0.008" pos="-0.1 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_9" type="sphere" size="0.008" pos="-0.1 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_7_10" type="sphere" size="0.008" pos="-0.1 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_0" type="sphere" size="0.008" pos="0.0 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_1" type="sphere" size="0.008" pos="0.0 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_2" type="sphere" size="0.008" pos="0.0 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_3" type="sphere" size="0.008" pos="0.0 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_4" type="sphere" size="0.008" pos="0.0 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_5" type="sphere" size="0.008" pos="0.0 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_6" type="sphere" size="0.008" pos="0.0 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_7" type="sphere" size="0.008" pos="0.0 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_8" type="sphere" size="0.008" pos="0.0 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_9" type="sphere" size="0.008" pos="0.0 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_8_10" type="sphere" size="0.008" pos="0.0 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_0" type="sphere" size="0.008" pos="0.1 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_1" type="sphere" size="0.008" pos="0.1 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_2" type="sphere" size="0.008" pos="0.1 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_3" type="sphere" size="0.008" pos="0.1 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_4" type="sphere" size="0.008" pos="0.1 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_5" type="sphere" size="0.008" pos="0.1 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_6" type="sphere" size="0.008" pos="0.1 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_7" type="sphere" size="0.008" pos="0.1 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_8" type="sphere" size="0.008" pos="0.1 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_9" type="sphere" size="0.008" pos="0.1 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_9_10" type="sphere" size="0.008" pos="0.1 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_0" type="sphere" size="0.008" pos="0.2 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_1" type="sphere" size="0.008" pos="0.2 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_2" type="sphere" size="0.008" pos="0.2 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_3" type="sphere" size="0.008" pos="0.2 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_4" type="sphere" size="0.008" pos="0.2 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_5" type="sphere" size="0.008" pos="0.2 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_6" type="sphere" size="0.008" pos="0.2 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_7" type="sphere" size="0.008" pos="0.2 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_8" type="sphere" size="0.008" pos="0.2 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_9" type="sphere" size="0.008" pos="0.2 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_10_10" type="sphere" size="0.008" pos="0.2 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_0" type="sphere" size="0.008" pos="0.3 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_1" type="sphere" size="0.008" pos="0.3 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_2" type="sphere" size="0.008" pos="0.3 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_3" type="sphere" size="0.008" pos="0.3 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_4" type="sphere" size="0.008" pos="0.3 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_5" type="sphere" size="0.008" pos="0.3 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_6" type="sphere" size="0.008" pos="0.3 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_7" type="sphere" size="0.008" pos="0.3 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_8" type="sphere" size="0.008" pos="0.3 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_9" type="sphere" size="0.008" pos="0.3 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_11_10" type="sphere" size="0.008" pos="0.3 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_0" type="sphere" size="0.008" pos="0.4 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_1" type="sphere" size="0.008" pos="0.4 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_2" type="sphere" size="0.008" pos="0.4 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_3" type="sphere" size="0.008" pos="0.4 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_4" type="sphere" size="0.008" pos="0.4 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_5" type="sphere" size="0.008" pos="0.4 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_6" type="sphere" size="0.008" pos="0.4 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_7" type="sphere" size="0.008" pos="0.4 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_8" type="sphere" size="0.008" pos="0.4 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_9" type="sphere" size="0.008" pos="0.4 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_12_10" type="sphere" size="0.008" pos="0.4 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_0" type="sphere" size="0.008" pos="0.5 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_1" type="sphere" size="0.008" pos="0.5 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_2" type="sphere" size="0.008" pos="0.5 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_3" type="sphere" size="0.008" pos="0.5 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_4" type="sphere" size="0.008" pos="0.5 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_5" type="sphere" size="0.008" pos="0.5 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_6" type="sphere" size="0.008" pos="0.5 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_7" type="sphere" size="0.008" pos="0.5 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_8" type="sphere" size="0.008" pos="0.5 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_9" type="sphere" size="0.008" pos="0.5 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_13_10" type="sphere" size="0.008" pos="0.5 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_0" type="sphere" size="0.008" pos="0.6 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_1" type="sphere" size="0.008" pos="0.6 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_2" type="sphere" size="0.008" pos="0.6 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_3" type="sphere" size="0.008" pos="0.6 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_4" type="sphere" size="0.008" pos="0.6 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_5" type="sphere" size="0.008" pos="0.6 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_6" type="sphere" size="0.008" pos="0.6 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_7" type="sphere" size="0.008" pos="0.6 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_8" type="sphere" size="0.008" pos="0.6 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_9" type="sphere" size="0.008" pos="0.6 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_14_10" type="sphere" size="0.008" pos="0.6 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_0" type="sphere" size="0.008" pos="0.7 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_1" type="sphere" size="0.008" pos="0.7 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_2" type="sphere" size="0.008" pos="0.7 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_3" type="sphere" size="0.008" pos="0.7 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_4" type="sphere" size="0.008" pos="0.7 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_5" type="sphere" size="0.008" pos="0.7 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_6" type="sphere" size="0.008" pos="0.7 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_7" type="sphere" size="0.008" pos="0.7 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_8" type="sphere" size="0.008" pos="0.7 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_9" type="sphere" size="0.008" pos="0.7 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_15_10" type="sphere" size="0.008" pos="0.7 0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_0" type="sphere" size="0.008" pos="0.8 -0.5 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_1" type="sphere" size="0.008" pos="0.8 -0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_2" type="sphere" size="0.008" pos="0.8 -0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_3" type="sphere" size="0.008" pos="0.8 -0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_4" type="sphere" size="0.008" pos="0.8 -0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_5" type="sphere" size="0.008" pos="0.8 0.0 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_6" type="sphere" size="0.008" pos="0.8 0.1 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_7" type="sphere" size="0.008" pos="0.8 0.2 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_8" type="sphere" size="0.008" pos="0.8 0.3 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_9" type="sphere" size="0.008" pos="0.8 0.4 0.0" zaxis="0 0 -1"/>
+      <site name="ray_16_10" type="sphere" size="0.008" pos="0.8 0.5 0.0" zaxis="0 0 -1"/>
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <body name="left_hip_roll_link" pos="-0.001 0.075 0" euler="0 0 0">
+        <inertial pos="-0.11964 0.10244 -0.05598" mass="0.34283" fullinertia="0.00223 0.00379 0.00287 0.00091 -0.00132 0.00049"/>
+        <joint name="left_hip_roll_joint" axis="1 0 0" range="-0.52 2.97"/>
+        <geom class="gemo_visual" type="mesh" mesh="mesh_l_hip_roll"/>
+
+        <body name="left_hip_yaw_link" pos="-0.166 0.128 -0.0835" euler="0 0 0">
+          <inertial pos="-1E-05 0.00843 -0.04551" mass="0.46018"
+                    fullinertia="0.00023 0.00035 0.00016 0 0 0"/>
+          <joint name="left_hip_yaw_joint" axis="0 0 1" range="-2.76 2.76"/>
+          <geom class="gemo_visual" type="mesh" mesh="mesh_l_hip_yaw"/>
+
+          <body name="left_hip_pitch_link" pos="0 0.028 -0.0455" euler="0 0 0">
+            <inertial pos="0.00472 -0.01824 -0.17562" mass="0.81624"
+                      fullinertia="0.01192 0.01225 0.00052 -4E-05 -0.00047 -0.00068"/>
+            <joint name="left_hip_pitch_joint" axis="0 1 0" range="-2.53 2.88"/>
+            <geom class="gemo_visual" type="mesh" mesh="mesh_l_hip_pitch"/>
+
+            <body name="left_knee_link" pos="0 -0.04325 -0.4" euler="0 0 0">
+              <inertial pos="0 0.01314 -0.14741" mass="0.10574"
+                        fullinertia="0.0018 0.0018 1E-05 0 0 -1E-05"/>
+              <joint name="left_knee_joint" axis="0 1 0" range="-0.09 2.88"/>
+              <geom class="gemo_visual" type="mesh" mesh="mesh_l_knee"/>
+
+              <body name="left_ankle_pitch_link" pos="0 0.00825 -0.392" euler="0 0 0">
+                <inertial pos="-0.04625 -0.01898 0" mass="0.04908"
+                          fullinertia="7E-05 5E-05 0.00011 -4E-05 0 0"/>
+                <joint name="left_ankle_pitch_joint" axis="0 1 0" range="-0.87 0.52"/>
+                <geom class="gemo_visual" type="mesh" mesh="mesh_l_ankle_pitch"/>
+
+                <body name="left_ankle_roll_link" pos="-0.063229 -0.0765 0" euler="0 0 0">
+                  <inertial pos="0.04783 0 -0.08669" mass="0.21284"
+                            fullinertia="0.00043 0.00147 0.00134 0 0.00031 0"/>
+                  <joint name="left_ankle_roll_joint" axis="1 0 0" range="-0.26 0.26"/>
+                  <geom class="gemo_visual" type="mesh" mesh="mesh_l_ankle_roll" rgba="0 0 1 1"/>
+
+                  <body name="leg_lfoot_link" pos="0.11 0.0 -0.125" euler="0 0 1.5708">
+                    <inertial pos="0 0 0" mass="0.0001"
+                              fullinertia="0.000001 0.000001 0.000001 0 0 0"/>
+                    <geom class="gemo_collision" type="box" size="0.06 0.1275 0.015" pos="0 0 0.025" rgba="0 1 0 1"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+      <body name="right_hip_roll_link" pos="-0.001 -0.075 0" euler="0 0 0">
+        <inertial pos="-0.11964 -0.10243 -0.05598" mass="0.34281" fullinertia="0.00223 0.00379 0.00287 -0.00091 -0.00132 -0.00049"/>
+        <joint name="right_hip_roll_joint" axis="1 0 0" range="-2.97 0.52"/>
+        <geom class="gemo_visual" type="mesh" mesh="mesh_r_hip_roll"/>
+
+        <body name="right_hip_yaw_link" pos="-0.166 -0.128 -0.0835" euler="0 0 0">
+          <inertial pos="-1E-05 -0.00843 -0.04551" mass="0.46018"
+                    fullinertia="0.00023 0.00035 0.00016 0 0 0"/>
+          <joint name="right_hip_yaw_joint" axis="0 0 1" range="-2.76 2.76"/>
+          <geom class="gemo_visual" type="mesh" mesh="mesh_r_hip_yaw"/>
+
+          <body name="right_hip_pitch_link" pos="0 -0.028 -0.0455" euler="0 0 0">
+            <inertial pos="0.00472 0.01824 -0.17562" mass="0.81624"
+                      fullinertia="0.01192 0.01225 0.00052 4E-05 -0.00047 0.00068"/>
+            <joint name="right_hip_pitch_joint" axis="0 1 0" range="-2.53 2.88"/>
+            <geom class="gemo_visual" type="mesh" mesh="mesh_r_hip_pitch"/>
+
+            <body name="right_knee_link" pos="0 0.04325 -0.4" euler="0 0 0">
+              <inertial pos="0 -0.01314 -0.14741" mass="0.10574"
+                        fullinertia="0.0018 0.0018 1E-05 0 0 1E-05"/>
+              <joint name="right_knee_joint" axis="0 1 0" range="-0.09 2.88"/>
+              <geom class="gemo_visual" type="mesh" mesh="mesh_r_knee"/>
+
+              <body name="right_ankle_pitch_link" pos="0 -0.00825 -0.392" euler="0 0 0">
+                <inertial pos="-0.04625 0.01898 0" mass="0.04908"
+                          fullinertia="7E-05 5E-05 0.00011 4E-05 0 0"/>
+                <joint name="right_ankle_pitch_joint" axis="0 1 0" range="-0.87 0.52"/>
+                <geom class="gemo_visual" type="mesh" mesh="mesh_r_ankle_pitch"/>
+
+                <body name="right_ankle_roll_link" pos="-0.063229 0.0765 0" euler="0 0 0">
+                  <inertial pos="0.04784 0 -0.08669" mass="0.21281"
+                            fullinertia="0.00043 0.00147 0.00134 0 0.00031 0"/>
+                  <joint name="right_ankle_roll_joint" axis="1 0 0" range="-0.26 2.6"/>
+                  <geom class="gemo_visual" type="mesh" mesh="mesh_r_ankle_roll" rgba="0 0 1 1"/>
+
+                  <body name="leg_rfoot_link" pos="0.11 0.0 -0.125" euler="0 0 1.5708">
+                    <inertial pos="0 0 0" mass="0.0001"
+                              fullinertia="0.000001 0.000001 0.000001 0 0 0"/>
+                    <geom class="gemo_collision" type="box" size="0.06 0.1275 0.015" pos="0 0 0.025" rgba="0 1 0 1"/>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+
+
+
+
+
+
+    </body><!-- /base_link -->
+  </worldbody>
+
+
+  <actuator>
+    <!-- Left Leg Actuators -->
+    <position name="act_left_hip_roll_joint"    joint="left_hip_roll_joint"    ctrlrange="-0.52 2.97"  kp="50.0" kv="0.3" />
+    <position name="act_left_hip_yaw_joint"     joint="left_hip_yaw_joint"     ctrlrange="-2.76 2.76"  kp="50.0" kv="0.3" />
+    <position name="act_left_hip_pitch_joint"   joint="left_hip_pitch_joint"   ctrlrange="-2.53 2.88"  kp="50.0" kv="0.3" />
+    <position name="act_left_knee_joint"        joint="left_knee_joint"        ctrlrange="-0.09 2.88"  kp="50.0" kv="0.3" />
+    <position name="act_left_ankle_pitch_joint" joint="left_ankle_pitch_joint" ctrlrange="-0.87 0.52"  kp="50.0" kv="0.3" />
+    <position name="act_left_ankle_roll_joint"  joint="left_ankle_roll_joint"  ctrlrange="-0.26 0.26"  kp="50.0" kv="0.3" />
+
+    <!-- Right Leg Actuators -->
+    <position name="act_right_hip_roll_joint"    joint="right_hip_roll_joint"    ctrlrange="-2.97 0.52"  kp="50.0" kv="0.3" />
+    <position name="act_right_hip_yaw_joint"     joint="right_hip_yaw_joint"     ctrlrange="-2.76 2.76"  kp="50.0" kv="0.3" />
+    <position name="act_right_hip_pitch_joint"   joint="right_hip_pitch_joint"   ctrlrange="-2.53 2.88"  kp="50.0" kv="0.3" />
+    <position name="act_right_knee_joint"        joint="right_knee_joint"        ctrlrange="-0.09 2.88"  kp="50.0" kv="0.3" />
+    <position name="act_right_ankle_pitch_joint" joint="right_ankle_pitch_joint" ctrlrange="-0.87 0.52"  kp="50.0" kv="0.3" />
+    <position name="act_right_ankle_roll_joint"  joint="right_ankle_roll_joint"  ctrlrange="-0.26 0.26"   kp="50.0" kv="0.3" />
+  </actuator>
+
+
+  <sensor>
+    <actuatorfrc name="sen_left_hip_roll_joint_trq"    actuator="act_left_hip_roll_joint"/>
+    <actuatorfrc name="sen_left_hip_yaw_joint_trq"     actuator="act_left_hip_yaw_joint"/>
+    <actuatorfrc name="sen_left_hip_pitch_joint_trq"   actuator="act_left_hip_pitch_joint"/>
+    <actuatorfrc name="sen_left_knee_joint_trq"        actuator="act_left_knee_joint"/>
+    <actuatorfrc name="sen_left_ankle_pitch_joint_trq" actuator="act_left_ankle_pitch_joint"/>
+    <actuatorfrc name="sen_left_ankle_roll_joint_trq"  actuator="act_left_ankle_roll_joint"/>
+
+    <actuatorfrc name="sen_right_hip_roll_joint_trq"    actuator="act_right_hip_roll_joint"/>
+    <actuatorfrc name="sen_right_hip_yaw_joint_trq"     actuator="act_right_hip_yaw_joint"/>
+    <actuatorfrc name="sen_right_hip_pitch_joint_trq"   actuator="act_right_hip_pitch_joint"/>
+    <actuatorfrc name="sen_right_knee_joint_trq"        actuator="act_right_knee_joint"/>
+    <actuatorfrc name="sen_right_ankle_pitch_joint_trq" actuator="act_right_ankle_pitch_joint"/>
+    <actuatorfrc name="sen_right_ankle_roll_joint_trq"  actuator="act_right_ankle_roll_joint"/>
+
+
+
+
+
+    <rangefinder site="ray_0_0" cutoff="15"/>
+    <rangefinder site="ray_0_1" cutoff="15"/>
+    <rangefinder site="ray_0_2" cutoff="15"/>
+    <rangefinder site="ray_0_3" cutoff="15"/>
+    <rangefinder site="ray_0_4" cutoff="15"/>
+    <rangefinder site="ray_0_5" cutoff="15"/>
+    <rangefinder site="ray_0_6" cutoff="15"/>
+    <rangefinder site="ray_0_7" cutoff="15"/>
+    <rangefinder site="ray_0_8" cutoff="15"/>
+    <rangefinder site="ray_0_9" cutoff="15"/>
+    <rangefinder site="ray_0_10" cutoff="15"/>
+    <rangefinder site="ray_1_0" cutoff="15"/>
+    <rangefinder site="ray_1_1" cutoff="15"/>
+    <rangefinder site="ray_1_2" cutoff="15"/>
+    <rangefinder site="ray_1_3" cutoff="15"/>
+    <rangefinder site="ray_1_4" cutoff="15"/>
+    <rangefinder site="ray_1_5" cutoff="15"/>
+    <rangefinder site="ray_1_6" cutoff="15"/>
+    <rangefinder site="ray_1_7" cutoff="15"/>
+    <rangefinder site="ray_1_8" cutoff="15"/>
+    <rangefinder site="ray_1_9" cutoff="15"/>
+    <rangefinder site="ray_1_10" cutoff="15"/>
+    <rangefinder site="ray_2_0" cutoff="15"/>
+    <rangefinder site="ray_2_1" cutoff="15"/>
+    <rangefinder site="ray_2_2" cutoff="15"/>
+    <rangefinder site="ray_2_3" cutoff="15"/>
+    <rangefinder site="ray_2_4" cutoff="15"/>
+    <rangefinder site="ray_2_5" cutoff="15"/>
+    <rangefinder site="ray_2_6" cutoff="15"/>
+    <rangefinder site="ray_2_7" cutoff="15"/>
+    <rangefinder site="ray_2_8" cutoff="15"/>
+    <rangefinder site="ray_2_9" cutoff="15"/>
+    <rangefinder site="ray_2_10" cutoff="15"/>
+    <rangefinder site="ray_3_0" cutoff="15"/>
+    <rangefinder site="ray_3_1" cutoff="15"/>
+    <rangefinder site="ray_3_2" cutoff="15"/>
+    <rangefinder site="ray_3_3" cutoff="15"/>
+    <rangefinder site="ray_3_4" cutoff="15"/>
+    <rangefinder site="ray_3_5" cutoff="15"/>
+    <rangefinder site="ray_3_6" cutoff="15"/>
+    <rangefinder site="ray_3_7" cutoff="15"/>
+    <rangefinder site="ray_3_8" cutoff="15"/>
+    <rangefinder site="ray_3_9" cutoff="15"/>
+    <rangefinder site="ray_3_10" cutoff="15"/>
+    <rangefinder site="ray_4_0" cutoff="15"/>
+    <rangefinder site="ray_4_1" cutoff="15"/>
+    <rangefinder site="ray_4_2" cutoff="15"/>
+    <rangefinder site="ray_4_3" cutoff="15"/>
+    <rangefinder site="ray_4_4" cutoff="15"/>
+    <rangefinder site="ray_4_5" cutoff="15"/>
+    <rangefinder site="ray_4_6" cutoff="15"/>
+    <rangefinder site="ray_4_7" cutoff="15"/>
+    <rangefinder site="ray_4_8" cutoff="15"/>
+    <rangefinder site="ray_4_9" cutoff="15"/>
+    <rangefinder site="ray_4_10" cutoff="15"/>
+    <rangefinder site="ray_5_0" cutoff="15"/>
+    <rangefinder site="ray_5_1" cutoff="15"/>
+    <rangefinder site="ray_5_2" cutoff="15"/>
+    <rangefinder site="ray_5_3" cutoff="15"/>
+    <rangefinder site="ray_5_4" cutoff="15"/>
+    <rangefinder site="ray_5_5" cutoff="15"/>
+    <rangefinder site="ray_5_6" cutoff="15"/>
+    <rangefinder site="ray_5_7" cutoff="15"/>
+    <rangefinder site="ray_5_8" cutoff="15"/>
+    <rangefinder site="ray_5_9" cutoff="15"/>
+    <rangefinder site="ray_5_10" cutoff="15"/>
+    <rangefinder site="ray_6_0" cutoff="15"/>
+    <rangefinder site="ray_6_1" cutoff="15"/>
+    <rangefinder site="ray_6_2" cutoff="15"/>
+    <rangefinder site="ray_6_3" cutoff="15"/>
+    <rangefinder site="ray_6_4" cutoff="15"/>
+    <rangefinder site="ray_6_5" cutoff="15"/>
+    <rangefinder site="ray_6_6" cutoff="15"/>
+    <rangefinder site="ray_6_7" cutoff="15"/>
+    <rangefinder site="ray_6_8" cutoff="15"/>
+    <rangefinder site="ray_6_9" cutoff="15"/>
+    <rangefinder site="ray_6_10" cutoff="15"/>
+    <rangefinder site="ray_7_0" cutoff="15"/>
+    <rangefinder site="ray_7_1" cutoff="15"/>
+    <rangefinder site="ray_7_2" cutoff="15"/>
+    <rangefinder site="ray_7_3" cutoff="15"/>
+    <rangefinder site="ray_7_4" cutoff="15"/>
+    <rangefinder site="ray_7_5" cutoff="15"/>
+    <rangefinder site="ray_7_6" cutoff="15"/>
+    <rangefinder site="ray_7_7" cutoff="15"/>
+    <rangefinder site="ray_7_8" cutoff="15"/>
+    <rangefinder site="ray_7_9" cutoff="15"/>
+    <rangefinder site="ray_7_10" cutoff="15"/>
+    <rangefinder site="ray_8_0" cutoff="15"/>
+    <rangefinder site="ray_8_1" cutoff="15"/>
+    <rangefinder site="ray_8_2" cutoff="15"/>
+    <rangefinder site="ray_8_3" cutoff="15"/>
+    <rangefinder site="ray_8_4" cutoff="15"/>
+    <rangefinder site="ray_8_5" cutoff="15"/>
+    <rangefinder site="ray_8_6" cutoff="15"/>
+    <rangefinder site="ray_8_7" cutoff="15"/>
+    <rangefinder site="ray_8_8" cutoff="15"/>
+    <rangefinder site="ray_8_9" cutoff="15"/>
+    <rangefinder site="ray_8_10" cutoff="15"/>
+    <rangefinder site="ray_9_0" cutoff="15"/>
+    <rangefinder site="ray_9_1" cutoff="15"/>
+    <rangefinder site="ray_9_2" cutoff="15"/>
+    <rangefinder site="ray_9_3" cutoff="15"/>
+    <rangefinder site="ray_9_4" cutoff="15"/>
+    <rangefinder site="ray_9_5" cutoff="15"/>
+    <rangefinder site="ray_9_6" cutoff="15"/>
+    <rangefinder site="ray_9_7" cutoff="15"/>
+    <rangefinder site="ray_9_8" cutoff="15"/>
+    <rangefinder site="ray_9_9" cutoff="15"/>
+    <rangefinder site="ray_9_10" cutoff="15"/>
+    <rangefinder site="ray_10_0" cutoff="15"/>
+    <rangefinder site="ray_10_1" cutoff="15"/>
+    <rangefinder site="ray_10_2" cutoff="15"/>
+    <rangefinder site="ray_10_3" cutoff="15"/>
+    <rangefinder site="ray_10_4" cutoff="15"/>
+    <rangefinder site="ray_10_5" cutoff="15"/>
+    <rangefinder site="ray_10_6" cutoff="15"/>
+    <rangefinder site="ray_10_7" cutoff="15"/>
+    <rangefinder site="ray_10_8" cutoff="15"/>
+    <rangefinder site="ray_10_9" cutoff="15"/>
+    <rangefinder site="ray_10_10" cutoff="15"/>
+    <rangefinder site="ray_11_0" cutoff="15"/>
+    <rangefinder site="ray_11_1" cutoff="15"/>
+    <rangefinder site="ray_11_2" cutoff="15"/>
+    <rangefinder site="ray_11_3" cutoff="15"/>
+    <rangefinder site="ray_11_4" cutoff="15"/>
+    <rangefinder site="ray_11_5" cutoff="15"/>
+    <rangefinder site="ray_11_6" cutoff="15"/>
+    <rangefinder site="ray_11_7" cutoff="15"/>
+    <rangefinder site="ray_11_8" cutoff="15"/>
+    <rangefinder site="ray_11_9" cutoff="15"/>
+    <rangefinder site="ray_11_10" cutoff="15"/>
+    <rangefinder site="ray_12_0" cutoff="15"/>
+    <rangefinder site="ray_12_1" cutoff="15"/>
+    <rangefinder site="ray_12_2" cutoff="15"/>
+    <rangefinder site="ray_12_3" cutoff="15"/>
+    <rangefinder site="ray_12_4" cutoff="15"/>
+    <rangefinder site="ray_12_5" cutoff="15"/>
+    <rangefinder site="ray_12_6" cutoff="15"/>
+    <rangefinder site="ray_12_7" cutoff="15"/>
+    <rangefinder site="ray_12_8" cutoff="15"/>
+    <rangefinder site="ray_12_9" cutoff="15"/>
+    <rangefinder site="ray_12_10" cutoff="15"/>
+    <rangefinder site="ray_13_0" cutoff="15"/>
+    <rangefinder site="ray_13_1" cutoff="15"/>
+    <rangefinder site="ray_13_2" cutoff="15"/>
+    <rangefinder site="ray_13_3" cutoff="15"/>
+    <rangefinder site="ray_13_4" cutoff="15"/>
+    <rangefinder site="ray_13_5" cutoff="15"/>
+    <rangefinder site="ray_13_6" cutoff="15"/>
+    <rangefinder site="ray_13_7" cutoff="15"/>
+    <rangefinder site="ray_13_8" cutoff="15"/>
+    <rangefinder site="ray_13_9" cutoff="15"/>
+    <rangefinder site="ray_13_10" cutoff="15"/>
+    <rangefinder site="ray_14_0" cutoff="15"/>
+    <rangefinder site="ray_14_1" cutoff="15"/>
+    <rangefinder site="ray_14_2" cutoff="15"/>
+    <rangefinder site="ray_14_3" cutoff="15"/>
+    <rangefinder site="ray_14_4" cutoff="15"/>
+    <rangefinder site="ray_14_5" cutoff="15"/>
+    <rangefinder site="ray_14_6" cutoff="15"/>
+    <rangefinder site="ray_14_7" cutoff="15"/>
+    <rangefinder site="ray_14_8" cutoff="15"/>
+    <rangefinder site="ray_14_9" cutoff="15"/>
+    <rangefinder site="ray_14_10" cutoff="15"/>
+    <rangefinder site="ray_15_0" cutoff="15"/>
+    <rangefinder site="ray_15_1" cutoff="15"/>
+    <rangefinder site="ray_15_2" cutoff="15"/>
+    <rangefinder site="ray_15_3" cutoff="15"/>
+    <rangefinder site="ray_15_4" cutoff="15"/>
+    <rangefinder site="ray_15_5" cutoff="15"/>
+    <rangefinder site="ray_15_6" cutoff="15"/>
+    <rangefinder site="ray_15_7" cutoff="15"/>
+    <rangefinder site="ray_15_8" cutoff="15"/>
+    <rangefinder site="ray_15_9" cutoff="15"/>
+    <rangefinder site="ray_15_10" cutoff="15"/>
+    <rangefinder site="ray_16_0" cutoff="15"/>
+    <rangefinder site="ray_16_1" cutoff="15"/>
+    <rangefinder site="ray_16_2" cutoff="15"/>
+    <rangefinder site="ray_16_3" cutoff="15"/>
+    <rangefinder site="ray_16_4" cutoff="15"/>
+    <rangefinder site="ray_16_5" cutoff="15"/>
+    <rangefinder site="ray_16_6" cutoff="15"/>
+    <rangefinder site="ray_16_7" cutoff="15"/>
+    <rangefinder site="ray_16_8" cutoff="15"/>
+    <rangefinder site="ray_16_9" cutoff="15"/>
+    <rangefinder site="ray_16_10" cutoff="15"/>
+
+
+
+
+
+
+
+  </sensor>
+</mujoco>

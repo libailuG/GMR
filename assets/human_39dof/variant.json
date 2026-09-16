@@ -1,0 +1,57 @@
+{
+  "source_export": "human_robot_export",
+  "coordinate_convention": "X forward, Y left, Z up",
+  "mass_kg": 70,
+  "active_joints": 39,
+  "fixed_finger_joints": [
+    "RightFinger1FlexJoint",
+    "RightFinger2FlexJoint",
+    "RightFinger3FlexJoint",
+    "RightFinger4FlexJoint",
+    "RightThumbFlexJoint",
+    "LeftFinger1FlexJoint",
+    "LeftFinger2FlexJoint",
+    "LeftFinger3FlexJoint",
+    "LeftFinger4FlexJoint",
+    "LeftThumbFlexJoint"
+  ],
+  "wrist_dofs_per_side": 2,
+  "active_collision_links": [
+    "ChestLink",
+    "LeftFootLink",
+    "LeftForefootLink",
+    "RightFootLink",
+    "RightForefootLink"
+  ],
+  "collision_shape": "box_chest_and_split_box_foot_plates",
+  "forefoot_joint_gap_m": 0.02,
+  "collision_boxes": {
+    "LeftFootLink": {
+      "pos": "0.0175 0 -0.11",
+      "urdf_size": "0.165 0.09 0.02",
+      "mj_size": "0.0825 0.045 0.01"
+    },
+    "RightFootLink": {
+      "pos": "0.0175 0 -0.11",
+      "urdf_size": "0.165 0.09 0.02",
+      "mj_size": "0.0825 0.045 0.01"
+    },
+    "LeftForefootLink": {
+      "pos": "0.0425 0 -0.025",
+      "urdf_size": "0.065 0.09 0.02",
+      "mj_size": "0.0325 0.045 0.01"
+    },
+    "RightForefootLink": {
+      "pos": "0.0425 0 -0.025",
+      "urdf_size": "0.065 0.09 0.02",
+      "mj_size": "0.0325 0.045 0.01"
+    },
+    "ChestLink": {
+      "pos": "-0.0035 0 0.1435",
+      "urdf_size": "0.18 0.32 0.24",
+      "mj_size": "0.09 0.16 0.12"
+    }
+  },
+  "fixed_pose": "all finger/thumb angles zero",
+  "visual_geometry_and_mass_preserved": true
+}

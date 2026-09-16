@@ -1,0 +1,41 @@
+{
+  "active_joints": 39,
+  "fixed_finger_joints": 10,
+  "preserved_wrist_joints": [
+    "RightWristFlexJoint",
+    "RightWristSideJoint",
+    "LeftWristFlexJoint",
+    "LeftWristSideJoint"
+  ],
+  "total_mass_kg": 70,
+  "identical_meshes": 60,
+  "active_collision_links": [
+    "ChestLink",
+    "LeftFootLink",
+    "LeftForefootLink",
+    "RightFootLink",
+    "RightForefootLink"
+  ],
+  "collision_shape": "box_chest_and_split_box_foot_plates",
+  "forefoot_joint_gap_m": 0.02,
+  "human.xml": {
+    "nq": 46,
+    "nv": 45,
+    "actuators": 39,
+    "pose_comparisons": 6,
+    "max_transform_error": 8.881784197001252e-16,
+    "minimum_joint_range_clearance_m": 0.007426221191455806,
+    "physics_steps": 2000,
+    "warnings": 0
+  },
+  "human_fixed.xml": {
+    "nq": 39,
+    "nv": 39,
+    "actuators": 39,
+    "pose_comparisons": 6,
+    "max_transform_error": 8.881784197001252e-16,
+    "minimum_joint_range_clearance_m": 0.007426221191455806,
+    "physics_steps": 2000,
+    "warnings": 0
+  }
+}

@@ -1,0 +1,5 @@
+mujoco==3.13.0
+numpy>=1.24
+trimesh>=4
+scipy>=1.10
+urdf-parser-py==0.0.4

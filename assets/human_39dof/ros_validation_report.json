@@ -1,0 +1,7 @@
+{
+  "ros_distro": "humble",
+  "joint_states_count": 39,
+  "dynamic_tf_count": 39,
+  "static_tf_count": 11,
+  "launch_success": true
+}
